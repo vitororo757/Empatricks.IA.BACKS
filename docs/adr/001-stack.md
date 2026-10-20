@@ -14,7 +14,7 @@
 | Banco | PostgreSQL (Supabase) |
 | API | REST com MVC |
 | Testes | Jest |
-| Migration | não decidido |
+| Migration | Supabase CLI, com migrations SQL em `supabase/migrations/` |
 
 ## Justificativas
 
@@ -28,11 +28,12 @@
 - **Banco:** não decidido
 - **API:** não decidido
 - **Testes:** não decidido
-- **Migration:** não decidido
+- **Migration:** Supabase CLI é a fonte de verdade para alterações de schema, incluindo RLS, policies, funções e triggers específicos do PostgreSQL/Supabase. As migrations são criadas com `supabase migration new` e validadas em banco local com `supabase db reset`. O Prisma permanece como ORM: após mudanças aplicadas localmente, `prisma db pull` atualiza `schema.prisma` e `prisma generate` atualiza o Prisma Client. A URL usada por essas operações deve apontar somente para o banco local.
 
 ## Alternativas descartadas
 
-não decidido
+- **Prisma Migrate como fonte de verdade:** não adotada porque políticas RLS e outros objetos específicos do Supabase/PostgreSQL exigem SQL explícito e precisam ser reproduzíveis pelo fluxo local do Supabase. O Prisma continua no projeto para acesso a dados e geração do client, mas não cria nem aplica migrations.
+- **Alteração manual pelo Supabase Studio ou SQL avulso:** descartada porque não gera histórico reproduzível e contraria as regras do projeto.
 
 ## Consequências
 
@@ -40,7 +41,7 @@ não decidido
 - Provisionar auth, banco e RLS num único provedor (Supabase), sem integrar serviços separados de auth e banco.
 - Tipagem ponta a ponta (TypeScript no front e no back) reduz divergência de contrato entre camadas.
 - Validação de entrada consistente com Zod, reaproveitável entre camadas que rodam em TypeScript.
-- Migrations e acesso a dados via Prisma, sem SQL manual para operações CRUD comuns.
+- Migrations versionadas em SQL pela CLI do Supabase; Prisma fornece acesso tipado a dados e geração do client.
 
 **Fica mais difícil:**
 - Trocar de provedor de auth/banco no futuro exige migrar RLS, políticas e configuração de autenticação junto — não são componentes isolados.
@@ -54,7 +55,6 @@ não decidido
 
 ## O que este ADR NÃO decide
 
-- Estratégia de migration (item deixado como "não decidido").
 - Infraestrutura de deploy/hospedagem além do Supabase (CI/CD, ambientes, escalabilidade).
 - Arquitetura interna do frontend (gerenciamento de estado, roteamento, styling).
 - Observabilidade, logging e monitoramento.

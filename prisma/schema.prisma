@@ -1,0 +1,41 @@
+generator client {
+  provider        = "prisma-client"
+  output          = "../src/generated/prisma"
+  previewFeatures = ["partialIndexes"]
+}
+
+datasource db {
+  provider = "postgresql"
+  schemas  = ["public", "auth"]
+}
+
+model Equipment {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  assetTag  String?  @unique(map: "equipment_asset_tag_key") @map("asset_tag")
+  name      String
+  category  String
+  brand     String?
+  model     String?
+  status    String   @default("available")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  loans     Loan[]
+
+  @@map("equipment")
+  @@schema("public")
+}
+
+model Loan {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  equipmentId String   @db.Uuid @map("equipment_id")
+  borrowerId  String   @default(dbgenerated("auth.uid()")) @db.Uuid @map("borrower_id")
+  borrowedAt  DateTime @default(now()) @map("borrowed_at") @db.Timestamptz(6)
+  dueAt       DateTime @default(dbgenerated("(CURRENT_DATE + 14)")) @map("due_at") @db.Date
+  returnedAt  DateTime? @map("returned_at") @db.Timestamptz(6)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  equipment   Equipment @relation(fields: [equipmentId], references: [id], onUpdate: NoAction)
+
+  // The active-only unique index is kept in the Supabase migration; it is not a global unique key for historical loans.
+  @@index([borrowerId, dueAt], map: "loans_active_by_borrower", where: raw("(returned_at IS NULL)"))
+  @@map("loans")
+  @@schema("public")
+}
