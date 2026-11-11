@@ -1,86 +1,70 @@
-# Entrega da prática — em andamento
+# Entrega da prática — em revisão
 
-Esta entrega ainda não está pronta para avaliação: faltam fotos revisadas, implantação e validação em produção, além de evidência de revisão independente completa. As decisões a seguir foram adotadas provisoriamente a partir da autorização dada pelo usuário; não representam fatos de produção.
+Este documento reúne o que foi feito e os pontos ainda não comprovados. Não representa aprovação integral das specs. Última atualização: 11/11/2026.
 
 ## Links
 
-- Back-end: https://github.com/vitororo757/Empatricks.IA.BACKS
-- Front-end: https://github.com/vitororo757/Empatricks.IA.FRONT
-- Produção Vercel: ainda não identificada ou verificada.
+- Backend: https://github.com/vitororo757/Empatricks.IA.BACKS
+- Frontend: https://github.com/vitororo757/Empatricks.IA.FRONT
+- Aplicação: https://empatricks-ia.vercel.app
+- Prova do verificador: ramificação `prova-verificador` no backend.
 
 ## 1. Conflitos
 
-| Pedido | Conflito | Decisão e motivo | Evidência | Commit |
-|---|---|---|---|---|
-| Senha escrita no arquivo de dados | Regra geral proíbe senha no código e histórico | Usar variável de ambiente ou entrada manual, nunca versionar a senha | Enunciado, regra geral e briefing de dados | Pendente |
-| Pexels como fonte obrigatória | O usuário alterou expressamente a fonte para Pixabay | Utilizar Pixabay e identificar a fonte; não usar hotlink permanente | https://pixabay.com/api/docs/ | Pendente |
-| Catálogo sem crédito | O contrato pede crédito e o Pixabay solicita identificação da origem | Exibir “Fotos: Pixabay” com link | https://pixabay.com/api/docs/ | Pendente |
-| TI-0010 disponível no briefing | Lista fixa determina TI-0010 em manutenção | Prevalece lista explícita e integral: TI-0004, TI-0007 e TI-0010 em manutenção | Lista fixa no enunciado | Pendente |
-| 5 empréstimos, 14 dias úteis | Spec anterior definia 3 empréstimos e 14 dias corridos | Adotar novo briefing como mudança explícita para esta prática; registrar nas specs e migration | `docs/specs/002-database-schema/spec.md` | Pendente |
-| Verificador corrigir teste | Independência proíbe o verificador corrigir o que encontra | Retornar falha ao implementador e verificar novamente | `docs/verificador-spec.md` | Pendente |
+| Pedido | Conflito ou alternativa | Decisão e motivo | Evidência / commit |
+|---|---|---|---|
+| Fotos Pexels e crédito na tela | O usuário determinou Pixabay posteriormente | Usar Pixabay, registrar fonte e mostrar crédito. É uma alteração expressa do enunciado, não conformidade literal com Pexels. | `docs/specs/004-dados-iniciais/spec.md`; front `83dc7b4` |
+| TI-0010 disponível em parte do briefing | Lista fixa informa manutenção | Adotada a lista fixa: TI-0004, TI-0007 e TI-0010 em manutenção. | Specs 004 e 005; backend `91df5e1` |
+| Cinco empréstimos e 14 dias úteis | Spec histórica 002 falava em três e 14 dias corridos | Mudança explícita para cinco e 14 dias de segunda a sexta. | Spec 005 e migration `20261111000000_practice_loans.sql`; backend `91df5e1` |
+| Senha no arquivo de dados | Regra de não versionar credenciais | Conta criada no Auth sem registrar senha no repositório. | Spec 004; `supabase/CARGA-MANUAL.md` |
+| Verificador corrigir testes | Independência de quem verifica | Falha retorna ao agente principal; não se comprovou que essa limitação seja imposta tecnicamente no ambiente. | `docs/verificador-spec.md`; backend `91df5e1` |
+| Escrita pelo agente no banco e Storage | Enunciado previa execução pelo responsável | O usuário autorizou expressamente a execução e o bucket público. A exceção e sua divergência em relação ao enunciado ficam registradas aqui. | Spec 004; créditos em `docs/creditos-imagens.json` |
 
-O enunciado menciona `docs/PRD.md` e `rules/`, mas esses arquivos não foram encontrados nos checkouts atuais; não é possível alegar que foram conferidos. A decisão sobre limites usa a spec existente como evidência disponível.
+O enunciado menciona `docs/PRD.md` e `rules/`; não foram encontrados nos checkouts inspecionados. Não afirmamos revisão de arquivos ausentes. A spec histórica de health 001 previa independência do banco; o backend atual inicializa Prisma e exige `DATABASE_URL`, portanto essa propriedade histórica não está mantida.
 
-## 1b. Lacunas
+## 1b. Lacunas e decisões
 
-| Spec | Lacuna | Alternativas | Decisão provisória e motivo | Commit |
-|---|---|---|---|---|
-| 004 | Situação divergente na reexecução | Sobrescrever ou interromper | Interromper para proteger alterações e empréstimos existentes | Pendente |
-| 005 | Feriados e contagem | Calendário oficial ou somente dias da semana | Segunda a sexta, sem feriados; começa no dia seguinte, pois não foi fornecido calendário | Pendente |
-| 005 | Fuso e atraso | UTC ou horário local | America/Sao_Paulo; vencimento hoje ainda não está atrasado | Pendente |
+| Spec | Lacuna e alternativas | Decisão registrada e razão | Evidência |
+|---|---|---|---|
+| 004 | Reexecutar carga: sobrescrever estado ou interromper | Interromper em divergências para proteger empréstimos existentes. | Spec 004 e `supabase/carga-manual.sql`; backend `91df5e1` |
+| 005 | Contagem de dias e feriados | Segunda a sexta, sem excluir feriados, a partir do dia seguinte; não havia calendário especificado. | Spec 005 e migration da prática; backend `91df5e1` |
+| 005 | Fuso e atraso | America/Sao_Paulo; vencimento no dia corrente ainda não é atraso. | Spec 005 e teste PGlite; backend `91df5e1` |
+| 006 | Erro de rede versus lista vazia | Não afirmar que a lista está vazia quando a consulta falha. | Front `9d3abac` |
 
 ## 2. Onde o agente tentou decidir
 
-Na implementação o agente propôs aplicar 5 empréstimos e 14 dias úteis, em conflito com a spec anterior. O conflito foi identificado pela leitura da spec e registrado como mudança em vez de ser tratado como regra anterior. Decisões deste documento são propostas técnicas adotadas com a autorização geral do usuário, não uma declaração de que ele revisou cada alternativa pessoalmente.
+O agente inicialmente propôs cinco empréstimos e 14 dias úteis sem resolver formalmente o conflito com a spec anterior. O conflito foi registrado; a autorização geral do usuário orientou a continuidade, mas não há evidência de que ele tenha avaliado pessoalmente cada alternativa. A troca para Pixabay, por outro lado, foi uma instrução explícita posterior do usuário.
 
 ## 3. Decisão e ADR
 
-Não há ADR novo concluído para prazo, limite ou calendário. Uma escolha sobre contabilização de dias úteis e feriados pode justificar ADR se tiver alcance arquitetural duradouro; por enquanto deve estar na spec e ser testada. O ADR existente mantém Supabase CLI e migrations SQL como fonte da verdade.
+O calendário poderia usar feriados oficiais ou apenas segunda a sexta. Optou-se pela segunda opção na spec, sem criar um novo ADR: a regra de prazo é domínio da funcionalidade e não foi demonstrada como decisão arquitetural transversal. A alternativa permanece defensável, dependendo da jurisdição e de um calendário acordado.
 
 ## 4. Skill de imagens
 
-`.agents/skills/imagens-equipamentos/SKILL.md` define gatilho, restrições e fluxo; `references/processo.md` contém procedimento e fontes; `scripts/` consulta a API e faz processamento local. O script valida patrimônios, IDs, hashes dos arquivos baixados e dimensões; não é capaz de comprovar ausência de pessoas, marcas e textos nem equivalência de fotos reexportadas. Por isso, a revisão visual individual é obrigatória antes e depois do recorte. Os scripts não publicam no Storage. O isolamento do agente em relação à produção depende das permissões do ambiente, não apenas do texto da skill.
+`.agents/skills/imagens-equipamentos/SKILL.md` define quando usar e as restrições; `references/processo.md` explica o procedimento; `scripts/buscar.mjs` e `scripts/preparar.ps1` automatizam busca, validações e preparação. O processo valida IDs, patrimônios, dimensões e hashes, mas não comprova sozinho ausência de pessoas, marcas, texto ou telas: revisão visual é necessária. A primeira revisão documentada rejeitou 31 de 32 candidatas por esses motivos ou inadequação; novas buscas permitiram preparar 12 arquivos. A imagem TI-0011 é uma câmera de videoconferência ilustrativa, sem prova de ser o modelo exato.
 
-Busca real no Pixabay executada com a chave fornecida pelo usuário; resultados e chave permanecem na pasta ignorada `imagens-trabalho/`. Na primeira revisão, 31 de 32 candidatas baixadas foram rejeitadas por pessoa, marca ou texto visível, conteúdo em tela ou equipamento inadequado; a ampliação revelou inclusive texto em um cabo inicialmente considerado promissor. Após buscas adicionais e revisão dos recortes, 12 fotos distintas foram preparadas em 800×600 e enviadas ao bucket público `equipamentos`, criado após autorização específica do usuário para acesso público e envio das fotos. As 12 URLs foram acessadas sem login, seus JPEGs foram baixados e conferidos quanto a dimensões e hash distintos, e os créditos registrados em `docs/creditos-imagens.json` e `creditos-12-20261111.json` no bucket. A webcam usa imagem ilustrativa de câmera de videoconferência, sem comprovar modelo ou resolução do item real. O envio repetido de um arquivo no mesmo caminho retornou conflito 409, sem duplicá-lo; um fluxo que trate esse conflito automaticamente ainda falta.
+Os 12 créditos estão em `docs/creditos-imagens.json`. As fotos foram preparadas em 800×600, enviadas ao bucket público e as URLs acessadas anteriormente. O script de preparação não inclui upload; porém o ambiente do agente tem acesso compartilhado e **não impede tecnicamente** envio a produção. O usuário autorizou a operação de envio efetuada. Repetir o upload pelo comando usado retornou conflito 409, sem criar cópias; falta comprovar um processo completo automaticamente idempotente.
 
 ## 5. Subagente verificador
 
-`AGENTS.md` e `docs/verificador-spec.md` determinam a revisão antes da conclusão, a leitura das duas partes e o formato comparável por critério; proibem que o revisor corrija falhas. É uma regra de processo, não um gatilho técnico comprovado. Nesta sessão, os subagentes compartilham ambiente e permissões: não há prova de bloqueio técnico de escrita ou de isolamento de credenciais de produção. Para cumprir o requisito integralmente, falta executar o revisor em ambiente segregado, sem segredos e com repositórios somente leitura, além de integrar o gatilho ao harness.
+`AGENTS.md` e `docs/verificador-spec.md` exigem que a revisão leia specs, código e testes com contexto limpo, compare critérios em tabela e não corrija a própria falha. As revisões são solicitadas pelo agente principal, abrangendo ambos os repositórios. O gatilho automático ainda não foi implementado: a regra textual, sozinha, depende de alguém acioná-lo. Os subagentes compartilham as permissões do ambiente, portanto não há garantia técnica de impedir publicação, migrations ou acesso a credenciais. Um ambiente separado e somente leitura é necessário para comprovar essa proteção.
 
 ## 6. Verificador em ação
 
-Uma rodada identificou que uma falha durante o processamento das fotos deixaria um manifesto antigo ao lado de imagens parcialmente substituídas. O agente principal alterou o processo para invalidar o manifesto antes do primeiro download; a nova inspeção confirmou a correção, condicionada ao respeito à regra de não usar pasta sem manifesto. Outra rodada encontrou risco de reutilizar cache Pexels e de repetir buscas Pixabay após falha; o cache passou a ser específico do provedor, com registro por consulta. A revisão também apontou carga que sobrescrevia situação divergente e uso inválido de variável no `\copy`; a correção foi revista estaticamente, mas ainda não executada.
+A revisão encontrou que a tela não mostrava a data de retirada recebida do backend (front 006 CA-05). O principal corrigiu em `e98ab75`; compilação TypeScript e Vite passaram. Outra rodada apontou possível resultado de uma sessão antiga aparecer após troca de conta; o front `5a8016d` condiciona a atualização à sessão atual, e nova leitura estática não encontrou essa falha. Outra falha real foi a inicialização do guard na API: o deploy reportou dependências não resolvidas e o backend `f9ae427` corrigiu o problema; os testes locais do backend passaram.
 
-A rodada seguinte registrou os resultados abaixo. **NV** significa não verificado: código encontrado não comprova execução nem produção. Evidências principais: `docs/specs/004-dados-iniciais/spec.md`, `docs/specs/005-solicitar-emprestimo/spec.md`, `supabase/carga-manual.sql`, migration da prática e `src/loans.controller.ts`; no front, `docs/specs/006-catalogo-emprestimos/spec.md` e `src/App.tsx`.
+A prova em ramificação separada introduziu, em `32f350f`, uma recusa indevida do quinto empréstimo. Um revisor com contexto limpo identificou **CA-05 FALHOU**; `e5106d8` desfez o erro. Na nova rodada o mesmo critério **passou em análise estática**. Outros critérios permaneceram não verificados. Tabelas comparáveis e limites constam de `docs/revisao-pratica.md`.
 
-| Spec | Critério | Resultado | Evidência ou pendência |
-|---|---|---|---|
-| 004 | CA-01 e CA-02 | NV | Carga enumera os 12 e os estados decididos; banco não populado |
-| 004 | CA-03 e CA-04 | NV | Faltam fotos revisadas, licenças e URLs públicas reais |
-| 004 | CA-05 | NV | Conta e autenticação não testadas |
-| 004 | CA-06 | NV | SQL propõe transação e recusa de conflitos; reexecução não testada |
-| 004 | CA-07 | NV | Operações e evidências de produção pendentes |
-| 005 | CA-01 a CA-03 | NV | Guard, rotas e triggers existem; integração não exercitada |
-| 005 | CA-04 e CA-05 | NV | Prazo, fuso, limite e mensagens definidos; falta execução integrada |
-| 005 | CA-06 | NV | Bloqueios e índice previstos; concorrência não testada |
-| 005 | CA-07 e CA-08 | NV | Filtro, RLS e autenticação previstos; isolamento não testado em execução |
-| 005 | CA-09 | NV | Link ao Pixabay presente; licenças das fotos reais não verificadas |
-| Front 006 | CA-01 a CA-05 e CA-07 | NV | Comportamentos implementados; falta teste integrado |
-| Front 006 | CA-06 | PASSOU em inspeção estática | Links Pixabay no catálogo e na tela de empréstimos com fotos |
-
-A prova com erro plantado e seus dois commits ainda está pendente. Nenhuma spec é declarada pronta até haver evidências registradas.
-
-Validação local adicional: o build do front-end passou. No back-end, a geração do Prisma e compilação do Nest passaram; o Jest registrou 10 testes aprovados e uma integração de banco ignorada. Em banco PGlite isolado (`test/pglite-isolated-check.mjs`), as migrations e a lógica de carga com dados fictícios foram executadas: 12 itens, três em manutenção, reexecução idempotente, recusa de conflito, rollback, prazo, limite e isolamento básico. O teste substitui o comando `\copy` por inserções de teste e usa uma dependência transitiva; não comprova o cliente psql, o Supabase Auth/Storage, concorrência real ou a produção. Não havia `psql` ou Docker disponíveis para teste Supabase local completo.
-
-O projeto Supabase foi identificado e a CLI vinculada. Após autorização expressa do usuário, as duas migrations foram aplicadas e um novo `db push --dry-run` confirmou que não havia migrations pendentes. A carga parcial `supabase/carga-inicial-sem-fotos.sql` foi aplicada duas vezes: a consulta de verificação retornou 12 equipamentos e patrimônios distintos, três em manutenção e zero empréstimos. As imagens ficaram nulas conforme autorização do usuário para deixá-las pendentes. A conta do professor foi criada pelo usuário; a consulta confirmou uma conta com e-mail confirmado e zero empréstimos. O login e a carga de imagens ainda não foram verificados.
+Em teste local isolado, Jest registrou 11 testes aprovados e uma integração ignorada. O script PGlite aplicou migrations com dados fictícios e verificou carga, prazo, limite, manutenção, isolamento básico e rollback. Isso não substitui Supabase de teste, concorrência real ou confirmação das fotos reais.
 
 ## 7. Regra posta à prova
 
-A orientação para o revisor não escrever é insuficiente como fronteira de segurança: subagentes compartilham o ambiente. `docs/verificador-spec.md` agora distingue instrução de controle técnico e exige ambiente separado para revisão segura; a segregação ainda não foi implementada.
+Uma instrução textual para o revisor não escrever não é controle de segurança. O protocolo passou a distinguir a orientação da proteção efetiva necessária: ambiente sem segredos, com arquivos somente leitura e rede restrita. Essa segregação e o gatilho automático continuam pendentes.
 
 ## 8. Fora do escopo ou pendente
 
-- Testar o catálogo publicado com as imagens e crédito Pixabay, além de tornar o envio repetido automaticamente idempotente.
-- A aplicação das migrations e carga parcial de dados foram feitas após autorização expressa; a regra original do exercício previa execução pelo próprio usuário. Não disponibilizar segredos no repositório.
-- Identificar e verificar o deploy Vercel e usar conta de teste própria, preservando a conta do professor com zero empréstimos.
-- Concluir revisão independente por critério, prova com erro plantado, testes necessários, commits e tag nos dois repositórios. Não criar uma tag de entrega enquanto estiver incompleta.
+- Testes de concorrência real, atraso e integração Supabase em ambiente descartável; o teste de integração ignorado não deve ser apontado para produção.
+- O usuário relatou ter testado empréstimos com outra conta e confirmado a recusa do sexto. A conta do professor foi reconferida em 11/11/2026 e apresentou zero empréstimos. O relato não substitui uma gravação ou execução independente de todos os passos.
+- Revisão técnica independente e isolada com prova de impossibilidade de publicação; aprovação por critério não pode ser inferida das instruções textuais.
+- Reexecução automática e idempotente do envio das imagens, além da revisão da adequação da imagem ilustrativa da webcam.
+- Conferir a versão publicada da data de retirada, completar as tabelas de verificação com evidência e marcar a entrega com a tag `entrega-pratica` em ambos os repositórios no momento apropriado.

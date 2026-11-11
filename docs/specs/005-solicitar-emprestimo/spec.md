@@ -25,4 +25,4 @@ Uma pessoa autenticada consulta o catálogo, pede um equipamento disponível e a
 `GET /equipment`; `GET /loans`; `POST /loans` com `{ "equipmentId": "uuid" }`. As três rotas exigem Bearer JWT validado pelo Supabase Auth. Erros de regra respondem 409 com campo `message`; uma entrada inválida recebe 400. A identidade e os claims confiáveis são definidos pelo backend.
 
 ## Verificação
-Os testes SQL devem exercitar isolamento RLS, status, limite e cálculo do prazo; concorrência, atraso e falhas devem ser exercitados em banco Supabase de teste. A aplicação em produção e sua validação permanecem pendentes até o responsável executá-las.
+Os testes SQL devem exercitar isolamento RLS, status, limite e cálculo do prazo; concorrência, atraso e falhas devem ser exercitados em banco Supabase de teste. O usuário informou que testou um empréstimo com outra conta; esse relato não comprova por si só cada regra ou concorrência. Consulte `ENTREGA.md` para os resultados e pendências.
