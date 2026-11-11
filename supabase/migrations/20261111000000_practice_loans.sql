@@ -28,7 +28,7 @@ BEGIN
     RAISE EXCEPTION 'A borrower with an overdue loan cannot borrow another item';
   END IF;
   SELECT count(*) INTO active_count FROM public.loans l WHERE l.borrower_id = NEW.borrower_id AND l.returned_at IS NULL;
-  IF active_count >= 4 THEN RAISE EXCEPTION 'A borrower cannot have more than five active loans'; END IF;
+  IF active_count >= 5 THEN RAISE EXCEPTION 'A borrower cannot have more than five active loans'; END IF;
   RETURN NEW;
 END;
 $fn$;
