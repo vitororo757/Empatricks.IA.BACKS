@@ -1,7 +1,9 @@
 import {
   CanActivate,
   ExecutionContext,
+  Inject,
   Injectable,
+  Optional,
   UnauthorizedException,
 } from '@nestjs/common';
 
@@ -23,9 +25,9 @@ interface AuthenticatedRequest {
 @Injectable()
 export class SupabaseAuthGuard implements CanActivate {
   constructor(
-    private readonly supabaseUrl: string,
-    private readonly publishableKey: string,
-    private readonly requestFetch: typeof fetch = fetch,
+    @Optional() @Inject('SUPABASE_URL') private readonly supabaseUrl: string = process.env.SUPABASE_URL ?? '',
+    @Optional() @Inject('SUPABASE_PUBLISHABLE_KEY') private readonly publishableKey: string = process.env.SUPABASE_PUBLISHABLE_KEY ?? '',
+    @Optional() @Inject('SUPABASE_REQUEST_FETCH') private readonly requestFetch: typeof fetch = fetch,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
