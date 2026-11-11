@@ -14,6 +14,7 @@ model Equipment {
   assetTag  String?  @unique(map: "equipment_asset_tag_key") @map("asset_tag")
   name      String
   category  String
+  imageUrl  String?  @map("image_url")
   brand     String?
   model     String?
   status    String   @default("available")
@@ -29,7 +30,7 @@ model Loan {
   equipmentId String   @db.Uuid @map("equipment_id")
   borrowerId  String   @default(dbgenerated("auth.uid()")) @db.Uuid @map("borrower_id")
   borrowedAt  DateTime @default(now()) @map("borrowed_at") @db.Timestamptz(6)
-  dueAt       DateTime @default(dbgenerated("(CURRENT_DATE + 14)")) @map("due_at") @db.Date
+  dueAt       DateTime @default(dbgenerated("loan_due_date(((now() AT TIME ZONE 'America/Sao_Paulo'::text))::date)")) @map("due_at") @db.Date
   returnedAt  DateTime? @map("returned_at") @db.Timestamptz(6)
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   equipment   Equipment @relation(fields: [equipmentId], references: [id], onUpdate: NoAction)

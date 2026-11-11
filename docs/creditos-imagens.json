@@ -1,0 +1,115 @@
+[
+  {
+    "patrimonio": "TI-0001",
+    "pixabay_id": 6856557,
+    "origem": "https://pixabay.com/photos/laptop-technology-electronic-6856557/",
+    "autor": "LUNEMax",
+    "licenca": "https://pixabay.com/service/license-summary/",
+    "url_publica": "https://pdcejrcfcktqwsqmlsgv.supabase.co/storage/v1/object/public/equipamentos/TI-0001.jpg",
+    "dimensoes": "800x600"
+  },
+  {
+    "patrimonio": "TI-0003",
+    "pixabay_id": 3036166,
+    "origem": "https://pixabay.com/photos/computer-laptop-blank-empty-screen-3036166/",
+    "autor": "kirill_makes_pics",
+    "licenca": "https://pixabay.com/service/license-summary/",
+    "url_publica": "https://pdcejrcfcktqwsqmlsgv.supabase.co/storage/v1/object/public/equipamentos/TI-0003.jpg",
+    "dimensoes": "800x600"
+  },
+  {
+    "patrimonio": "TI-0005",
+    "pixabay_id": 17894,
+    "origem": "https://pixabay.com/photos/blank-business-computer-desktop-17894/",
+    "autor": "PublicDomainPictures",
+    "licenca": "https://pixabay.com/service/license-summary/",
+    "url_publica": "https://pdcejrcfcktqwsqmlsgv.supabase.co/storage/v1/object/public/equipamentos/TI-0005.jpg",
+    "dimensoes": "800x600"
+  },
+  {
+    "patrimonio": "TI-0007",
+    "pixabay_id": 17768,
+    "origem": "https://pixabay.com/photos/blank-business-computer-desktop-17768/",
+    "autor": "PublicDomainPictures",
+    "licenca": "https://pixabay.com/service/license-summary/",
+    "url_publica": "https://pdcejrcfcktqwsqmlsgv.supabase.co/storage/v1/object/public/equipamentos/TI-0007.jpg",
+    "dimensoes": "800x600"
+  },
+  {
+    "patrimonio": "TI-0008",
+    "pixabay_id": 1827,
+    "origem": "https://pixabay.com/photos/high-definition-multimedia-1827/",
+    "autor": "PublicDomainPictures",
+    "licenca": "https://pixabay.com/service/license-summary/",
+    "url_publica": "https://pdcejrcfcktqwsqmlsgv.supabase.co/storage/v1/object/public/equipamentos/TI-0008.jpg",
+    "dimensoes": "800x600"
+  },
+  {
+    "patrimonio": "TI-0009",
+    "pixabay_id": 4498745,
+    "origem": "https://pixabay.com/photos/cable-wire-technology-plug-4498745/",
+    "autor": "tomekwalecki",
+    "licenca": "https://pixabay.com/service/license-summary/",
+    "url_publica": "https://pdcejrcfcktqwsqmlsgv.supabase.co/storage/v1/object/public/equipamentos/TI-0009.jpg",
+    "dimensoes": "800x600"
+  },
+  {
+    "patrimonio": "TI-0010",
+    "pixabay_id": 494649,
+    "origem": "https://pixabay.com/photos/network-cable-cable-patch-494649/",
+    "autor": "blickpixel",
+    "licenca": "https://pixabay.com/service/license-summary/",
+    "url_publica": "https://pdcejrcfcktqwsqmlsgv.supabase.co/storage/v1/object/public/equipamentos/TI-0010.jpg",
+    "dimensoes": "800x600"
+  },
+  {
+    "patrimonio": "TI-0011",
+    "pixabay_id": 1163880,
+    "origem": "https://pixabay.com/photos/video-conference-hd-material-1163880/",
+    "autor": "willsong",
+    "licenca": "https://pixabay.com/service/license-summary/",
+    "url_publica": "https://pdcejrcfcktqwsqmlsgv.supabase.co/storage/v1/object/public/equipamentos/TI-0011.jpg",
+    "dimensoes": "800x600",
+    "observacao": "Imagem ilustrativa de câmera de videoconferência; não há comprovação do modelo ou resolução do equipamento real."
+  },
+  {
+    "patrimonio": "TI-0004",
+    "pixabay_id": 593327,
+    "origem": "https://pixabay.com/photos/desk-laptop-notebook-pen-workspace-593327/",
+    "autor": "StartupStockPhotos",
+    "licenca": "https://pixabay.com/service/license-summary/",
+    "url_publica": "https://pdcejrcfcktqwsqmlsgv.supabase.co/storage/v1/object/public/equipamentos/TI-0004.jpg",
+    "dimensoes": "800x600",
+    "observacao": "Recorte remove objeto com texto; imagem ilustrativa."
+  },
+  {
+    "patrimonio": "TI-0002",
+    "pixabay_id": 2746336,
+    "origem": "https://pixabay.com/photos/laptop-notebook-front-transparent-2746336/",
+    "autor": "chapay",
+    "licenca": "https://pixabay.com/service/license-summary/",
+    "url_publica": "https://pdcejrcfcktqwsqmlsgv.supabase.co/storage/v1/object/public/equipamentos/TI-0002.jpg",
+    "dimensoes": "800x600",
+    "observacao": "Imagem ilustrativa, tela sem conteúdo."
+  },
+  {
+    "patrimonio": "TI-0012",
+    "pixabay_id": 7703231,
+    "origem": "https://pixabay.com/photos/camera-tripod-exilim-casio-7703231/",
+    "autor": "bhanukhan",
+    "licenca": "https://pixabay.com/service/license-summary/",
+    "url_publica": "https://pdcejrcfcktqwsqmlsgv.supabase.co/storage/v1/object/public/equipamentos/TI-0012.jpg",
+    "dimensoes": "800x600",
+    "observacao": "Câmera vista de costas; recorte focado no equipamento."
+  },
+  {
+    "patrimonio": "TI-0006",
+    "pixabay_id": 2386288,
+    "origem": "https://pixabay.com/photos/classroom-engine-room-computer-2386288/",
+    "autor": "asuraneo",
+    "licenca": "https://pixabay.com/service/license-summary/",
+    "url_publica": "https://pdcejrcfcktqwsqmlsgv.supabase.co/storage/v1/object/public/equipamentos/TI-0006.jpg",
+    "dimensoes": "800x600",
+    "observacao": "Recorte com monitores ilustrativos sem marcas legíveis."
+  }
+]
